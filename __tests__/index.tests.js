@@ -42,4 +42,18 @@ describe("CheckOut", () => {
         co.scan("A");
         expect(co.total).toBe(260);
     })
+
+    it("returns correct sum given multiple repeating items", () => {
+        const co1 = new CheckOut(rules);
+        co1.scan("AAAB");
+        expect(co1.total).toBe(160);
+        co1.scan("B");
+        expect(co1.total).toBe(175);
+        co1.scan("D");
+        expect(co1.total).toBe(190);
+
+        const co2 = new CheckOut(rules);
+        co2.scan("DABABA");
+        expect(co2.total).toBe(190);
+    })
 })
