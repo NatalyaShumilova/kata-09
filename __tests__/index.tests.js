@@ -56,4 +56,18 @@ describe("CheckOut", () => {
         co2.scan("DABABA");
         expect(co2.total).toBe(190);
     })
+
+    it("returns correct sum after every scanned item", () => {
+        const co = new CheckOut(rules);
+        co.scan("A");
+        expect(co.total).toBe(50);
+        co.scan("B");
+        expect(co.total).toBe(80);
+        co.scan("A");
+        expect(co.total).toBe(130);
+        co.scan("A");
+        expect(co.total).toBe(160);
+        co.scan("B");
+        expect(co.total).toBe(175);
+    })
 })
