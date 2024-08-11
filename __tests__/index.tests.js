@@ -1,3 +1,4 @@
+require("jest");
 const CheckOut = require("../index");
 
 const rules = {
@@ -26,5 +27,19 @@ describe("CheckOut", () => {
         const co3 = new CheckOut(rules);
         co3.scan("CDBA");
         expect(co3.total).toBe(115);
+    })
+
+    it("returns correct sum given repeating items", () => {
+        const co = new CheckOut(rules);
+        co.scan("AA");
+        expect(co.total).toBe(100);
+        co.scan("A");
+        expect(co.total).toBe(130);
+        co.scan("A");
+        expect(co.total).toBe(180);
+        co.scan("A");
+        expect(co.total).toBe(230);
+        co.scan("A");
+        expect(co.total).toBe(260);
     })
 })
