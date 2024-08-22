@@ -11,15 +11,23 @@ class CheckOut {
 
         Object.entries(this.scanned).forEach(([item, count]) => {
 
-            const special = this.rules[item].specialPrice;
+            const specials = this.rules[item].specialPrice?.sort((a, b) => b.units - a.units);
             const unitPrice = this.rules[item].unitPrice;
-
-            if(!special || count < special.units) {
+            if(!specials || count < specials[specials.length - 1].units) {
                 this.total += count * unitPrice;
             } else {
-                const specialCost = Math.floor(count/special.units) * special.price;
-                const unitCost = count%special.units * unitPrice;
-                this.total += specialCost + unitCost;
+                let remainingCount = count // the items we haven't counted
+
+                specials.forEach(s => { 
+                    if (remainingCount >= s.units) {
+                        const numberOfDiscounts = Math.floor(remainingCount/s.units)
+                        remainingCount -= s.units * numberOfDiscounts;
+                        this.total += numberOfDiscounts * s.price;
+                    }
+                })
+                
+                const unitCost = remainingCount * unitPrice;
+                this.total += unitCost;
             }
         })
     }

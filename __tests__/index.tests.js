@@ -2,8 +2,8 @@ require("jest");
 const CheckOut = require("../index");
 
 const rules = {
-   A: {unitPrice: 50, specialPrice: {units: 3, price: 130}},
-   B: {unitPrice: 30, specialPrice: {units: 2, price: 45}},
+   A: {unitPrice: 50, specialPrice: [{units: 3, price: 130}, {units: 5, price: 100}]},
+   B: {unitPrice: 30, specialPrice: [{units: 2, price: 45}]},
    C: {unitPrice: 20},
    D: {unitPrice: 15}
 };
@@ -38,9 +38,13 @@ describe("CheckOut", () => {
         co.scan("A");
         expect(co.total).toBe(180);
         co.scan("A");
-        expect(co.total).toBe(230);
+        expect(co.total).toBe(100);
         co.scan("A");
-        expect(co.total).toBe(260);
+        expect(co.total).toBe(150);
+        co.scan("A");
+        expect(co.total).toBe(200);
+        co.scan("A");
+        expect(co.total).toBe(230);
     })
 
     it("returns correct sum given multiple repeating items", () => {
@@ -69,5 +73,13 @@ describe("CheckOut", () => {
         expect(co.total).toBe(160);
         co.scan("B");
         expect(co.total).toBe(175);
+    })
+
+    it("returns the correct sun given multiple discounts", () => {
+        const co = new CheckOut(rules);
+        co.scan("AAA");
+        expect(co.total).toBe(130);
+        co.scan("AA");
+        expect(co.total).toBe(100)
     })
 })
